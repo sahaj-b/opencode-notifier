@@ -2,9 +2,19 @@
   "name": "opencode-notifier",
   "version": "0.1.0",
   "description": "OpenCode plugin that sends system notifications and plays sounds when permission is needed, generation completes, or errors occur",
+  "author": "mohak34",
+  "license": "MIT",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mohak34/opencode-notifier.git"
+  },
+  "homepage": "https://github.com/mohak34/opencode-notifier#readme",
+  "bugs": {
+    "url": "https://github.com/mohak34/opencode-notifier/issues"
+  },
   "files": [
     "dist",
     "sounds"
@@ -21,7 +31,6 @@
     "sound",
     "alerts"
   ],
-  "license": "MIT",
   "dependencies": {
     "node-notifier": "^10.0.1"
   },

@@ -4,7 +4,7 @@ OpenCode plugin that plays sounds and sends system notifications when permission
 
 ## Installation
 
-Add the plugin to your OpenCode config:
+Add the plugin to your `opencode.json` or `opencode.jsonc`:
 
 ```json
 {
@@ -12,7 +12,15 @@ Add the plugin to your OpenCode config:
 }
 ```
 
-Restart OpenCode. The plugin will be automatically downloaded and activated.
+Restart OpenCode. The plugin will be automatically installed and loaded.
+
+## Platform Notes
+
+The plugin works out of the box on all platforms. For best results:
+
+- **macOS**: No additional setup required
+- **Windows**: No additional setup required
+- **Linux**: For sounds, one of these should be installed: `paplay`, `aplay`, `mpv`, or `ffplay`. For notifications, `notify-send` is recommended.
 
 ## Configuration
 
