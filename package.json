@@ -15,9 +15,6 @@
   "bugs": {
     "url": "https://github.com/mohak34/opencode-notifier/issues"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
   "files": [
     "dist",
     "sounds"
