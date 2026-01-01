@@ -71,7 +71,7 @@ async function playOnMac(soundPath: string): Promise<void> {
 }
 
 async function playOnWindows(soundPath: string): Promise<void> {
-  const script = `(New-Object Media.SoundPlayer $args[0]).PlaySync()`
+  const script = `& { (New-Object Media.SoundPlayer $args[0]).PlaySync() }`
   await runCommand("powershell", ["-c", script, soundPath])
 }
 
