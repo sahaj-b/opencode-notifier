@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.10] - 2026-01-04
+
+### Fixed
+- macOS notifications now use native `osascript` instead of `node-notifier` (fixes notifications not showing)
+
+### Added
+- `permission.ask` hook for more stable permission notifications
+
 ## [0.1.9] - 2026-01-04
 
 ### Added

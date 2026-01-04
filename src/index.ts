@@ -48,6 +48,9 @@ export const NotifierPlugin: Plugin = async () => {
         await handleEvent(config, "error")
       }
     },
+    "permission.ask": async () => {
+      await handleEvent(config, "permission")
+    },
   }
 }
 
