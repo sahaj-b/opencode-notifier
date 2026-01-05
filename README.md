@@ -18,7 +18,7 @@ To pin a specific version:
 
 ```json
 {
-  "plugin": ["@mohak34/opencode-notifier@0.1.8"]
+  "plugin": ["@mohak34/opencode-notifier@0.1.10"]
 }
 ```
 
@@ -46,13 +46,13 @@ Remove-Item -Recurse -Force "$env:USERPROFILE\.cache\opencode\node_modules\@moha
 
 Then restart OpenCode - it will download the latest version automatically.
 
-### If you use a pinned version (e.g., `@0.1.7`)
+### If you use a pinned version (e.g., `@0.1.10`)
 
 1. Update the version in your `opencode.json`:
 
    ```json
    {
-     "plugin": ["@mohak34/opencode-notifier@0.1.8"]
+     "plugin": ["@mohak34/opencode-notifier@0.1.10"]
    }
    ```
 
@@ -177,7 +177,7 @@ If a custom sound file path is provided but the file doesn't exist, the plugin w
 
 ### macOS: Notifications not showing (only sound works)
 
-**Update to v0.1.8 or later** - this version includes a fix for macOS notification events.
+**Update to v0.1.10 or later** - this version includes a fix for macOS notification events.
 
 If notifications still don't work after updating:
 
