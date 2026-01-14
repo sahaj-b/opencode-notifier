@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.11] - 2026-01-14
+
+### Changed
+- Sounds now enabled by default (aligns with documented behavior)
+
+### Fixed
+- Improved bundled sound file path resolution for different installation structures
+
 ## [0.1.10] - 2026-01-04
 
 ### Fixed
