@@ -17,7 +17,8 @@
   },
   "files": [
     "dist",
-    "sounds"
+    "sounds",
+    "scripts"
   ],
   "scripts": {
     "build": "bun build src/index.ts --outdir dist --target node",
