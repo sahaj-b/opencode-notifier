@@ -1,6 +1,6 @@
 {
   "name": "@sahaj-b/opencode-notifier",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "OpenCode plugin that sends system notifications (focus-aware) and plays sounds when permission is needed, generation completes, or errors occur",
   "author": "sahaj-b",
   "license": "MIT",

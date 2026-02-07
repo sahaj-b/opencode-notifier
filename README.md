@@ -160,7 +160,7 @@ Customize notification appearance using placeholders. Eg:
 
 | Placeholder       | Description                                           |
 | ----------------- | ----------------------------------------------------- |
-| `{title}`         | Session title (clamped to 25 characters)              |
+| `{title}`         | Session title                                         |
 | `{directory}`     | Current working directory (project name)              |
 | `{message}`       | Event message (e.g., "Session finished")              |
 

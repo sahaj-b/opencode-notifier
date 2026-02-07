@@ -13,22 +13,14 @@ import { getSessionTitle, isOpencodeFocused, setSessionTitle } from "./focus";
 import { sendNotification } from "./notify";
 import { playSound } from "./sound";
 
-function clampString(str: string, maxLength: number): string {
-	if (str.length <= maxLength) {
-		return str;
-	}
-	return str.slice(0, maxLength - 1) + "…";
-}
-
 function formatNotification(
 	format: string,
 	message: string,
 	projectName: string | null,
 ): string {
 	const sessionTitle = getSessionTitle();
-	const clampedTitle = sessionTitle ? clampString(sessionTitle, 30) : "";
 	return format
-		.replace("{title}", clampedTitle)
+		.replace("{title}", sessionTitle ?? "")
 		.replace("{directory}", projectName ?? "")
 		.replace("{message}", message);
 }
