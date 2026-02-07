@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
-TERM_INITIAL_TITLE_REGEX='^(foot|kitty|Alacritty|Ghostty)$'
-
 SESSION_TITLE="${1:-}"
+TERM_INITIAL_TITLE_REGEX="${2:-^(foot|kitty|Alacritty|Ghostty)$}"
 set -u
 
 if [ -n "$SESSION_TITLE" ]; then

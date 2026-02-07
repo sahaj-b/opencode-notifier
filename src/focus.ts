@@ -1,9 +1,15 @@
 import { spawn } from "child_process";
 import { existsSync } from "fs";
-import { sendNotification } from "./notify";
+
+let sessionTitle: string | null = "";
+
+export function setSessionTitle(title: string | null) {
+	sessionTitle = title;
+}
 
 export async function isOpencodeFocused(
 	scriptPath: string | null,
+	termInitialTitle: string | null,
 ): Promise<boolean> {
 	if (!scriptPath) {
 		return false;
@@ -14,9 +20,15 @@ export async function isOpencodeFocused(
 	}
 
 	return new Promise((resolve) => {
-		const child = spawn(scriptPath, [], {
-			stdio: ["ignore", "ignore", "ignore"],
-		});
+		const child = spawn(
+			scriptPath,
+			termInitialTitle
+				? [sessionTitle ?? "", termInitialTitle]
+				: [sessionTitle ?? ""],
+			{
+				stdio: ["ignore", "ignore", "ignore"],
+			},
+		);
 
 		child.on("exit", async (code) => {
 			const isFocused = code === 0;

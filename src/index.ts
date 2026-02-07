@@ -9,7 +9,7 @@ import {
 	isEventSoundEnabled,
 	loadConfig,
 } from "./config";
-import { isOpencodeFocused } from "./focus";
+import { isOpencodeFocused, setSessionTitle } from "./focus";
 import { sendNotification } from "./notify";
 import { playSound } from "./sound";
 
@@ -30,19 +30,24 @@ async function handleEvent(
 	elapsedSeconds?: number | null,
 ): Promise<void> {
 	const isFocused = config.suppressWhenFocused
-		? await isOpencodeFocused(config.focusDetectionScript)
+		? await isOpencodeFocused(
+				config.focusDetectionScript,
+				config.termInitialTitle,
+			)
 		: false;
 
 	const promises: Promise<void>[] = [];
 
 	const message = getMessage(config, eventType);
-
 	if (!isFocused && isEventNotificationEnabled(config, eventType)) {
 		const title = getNotificationTitle(config, projectName);
 		promises.push(sendNotification(title, message, config.timeout));
 	}
 
-	if (!isFocused && isEventSoundEnabled(config, eventType)) {
+	if (
+		(!isFocused || !config.suppressSoundWhenFocused) &&
+		isEventSoundEnabled(config, eventType)
+	) {
 		const customSoundPath = getSoundPath(config, eventType);
 		promises.push(playSound(eventType, customSoundPath));
 	}
@@ -140,12 +145,28 @@ async function handleEventWithElapsedTime(
 	await handleEvent(config, eventType, projectName, elapsedSeconds);
 }
 
-export const NotifierPlugin: Plugin = async ({ client, directory }) => {
+export const NotifierPlugin: Plugin = async ({
+	client,
+	directory,
+	project,
+}) => {
 	const config = loadConfig();
 	const projectName = directory ? basename(directory) : null;
 
 	return {
 		event: async ({ event }) => {
+			if (event.type === "session.created") {
+				const title = event.properties.info.title ?? null;
+				setSessionTitle(title);
+			}
+
+			if (event.type === "session.updated") {
+				const title = event.properties.info.title ?? null;
+				if (title) {
+					setSessionTitle(title);
+				}
+			}
+
 			if (event.type === "permission.updated") {
 				await handleEventWithElapsedTime(
 					client,

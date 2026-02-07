@@ -34,7 +34,9 @@ export interface NotifierConfig {
 	timeout: number;
 	showProjectName: boolean;
 	suppressWhenFocused: boolean;
+	suppressSoundWhenFocused: boolean;
 	focusDetectionScript: string | null;
+	termInitialTitle: string | null;
 	command: CommandConfig;
 	events: {
 		permission: EventConfig;
@@ -70,7 +72,9 @@ const DEFAULT_CONFIG: NotifierConfig = {
 	timeout: 5,
 	showProjectName: true,
 	suppressWhenFocused: true,
+	suppressSoundWhenFocused: false,
 	focusDetectionScript: getBundledScriptPath(),
+	termInitialTitle: null,
 	command: {
 		enabled: false,
 		path: "",
@@ -167,11 +171,17 @@ export function loadConfig(): NotifierConfig {
 				userConfig.showProjectName ?? DEFAULT_CONFIG.showProjectName,
 			suppressWhenFocused:
 				userConfig.suppressWhenFocused ?? DEFAULT_CONFIG.suppressWhenFocused,
-			focusDetectionScript:
-				typeof userConfig.focusDetectionScript === "string"
-					? userConfig.focusDetectionScript
-					: DEFAULT_CONFIG.focusDetectionScript,
-			command: {
+			suppressSoundWhenFocused:
+				userConfig.suppressSoundWhenFocused ?? DEFAULT_CONFIG.suppressSoundWhenFocused,
+		focusDetectionScript:
+			typeof userConfig.focusDetectionScript === "string"
+				? userConfig.focusDetectionScript
+				: DEFAULT_CONFIG.focusDetectionScript,
+		termInitialTitle:
+			typeof userConfig.termInitialTitle === "string"
+				? userConfig.termInitialTitle
+				: DEFAULT_CONFIG.termInitialTitle,
+		command: {
 				enabled:
 					typeof userCommand.enabled === "boolean"
 						? userCommand.enabled
