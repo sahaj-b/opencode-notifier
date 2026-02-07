@@ -9,18 +9,28 @@ import {
 	isEventSoundEnabled,
 	loadConfig,
 } from "./config";
-import { isOpencodeFocused, setSessionTitle } from "./focus";
+import { getSessionTitle, isOpencodeFocused, setSessionTitle } from "./focus";
 import { sendNotification } from "./notify";
 import { playSound } from "./sound";
 
-function getNotificationTitle(
-	config: NotifierConfig,
+function clampString(str: string, maxLength: number): string {
+	if (str.length <= maxLength) {
+		return str;
+	}
+	return str.slice(0, maxLength - 1) + "…";
+}
+
+function formatNotification(
+	format: string,
+	message: string,
 	projectName: string | null,
 ): string {
-	if (config.showProjectName && projectName) {
-		return `OpenCode (${projectName})`;
-	}
-	return "OpenCode";
+	const sessionTitle = getSessionTitle();
+	const clampedTitle = sessionTitle ? clampString(sessionTitle, 30) : "";
+	return format
+		.replace("{title}", clampedTitle)
+		.replace("{directory}", projectName ?? "")
+		.replace("{message}", message);
 }
 
 async function handleEvent(
@@ -40,8 +50,9 @@ async function handleEvent(
 
 	const message = getMessage(config, eventType);
 	if (!isFocused && isEventNotificationEnabled(config, eventType)) {
-		const title = getNotificationTitle(config, projectName);
-		promises.push(sendNotification(title, message, config.timeout));
+		const title = formatNotification(config.format.title, message, projectName);
+		const body = formatNotification(config.format.body, message, projectName);
+		promises.push(sendNotification(title, body, config.timeout));
 	}
 
 	if (
@@ -145,11 +156,7 @@ async function handleEventWithElapsedTime(
 	await handleEvent(config, eventType, projectName, elapsedSeconds);
 }
 
-export const NotifierPlugin: Plugin = async ({
-	client,
-	directory,
-	project,
-}) => {
+export const NotifierPlugin: Plugin = async ({ client, directory }) => {
 	const config = loadConfig();
 	const projectName = directory ? basename(directory) : null;
 

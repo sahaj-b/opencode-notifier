@@ -7,6 +7,10 @@ export function setSessionTitle(title: string | null) {
 	sessionTitle = title;
 }
 
+export function getSessionTitle(): string | null {
+	return sessionTitle;
+}
+
 export async function isOpencodeFocused(
 	scriptPath: string | null,
 	termInitialTitle: string | null,

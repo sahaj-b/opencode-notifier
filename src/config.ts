@@ -28,11 +28,16 @@ export interface CommandConfig {
 	minDuration?: number;
 }
 
+export interface NotificationFormat {
+	title: string;
+	body: string;
+}
+
 export interface NotifierConfig {
 	sound: boolean;
 	notification: boolean;
 	timeout: number;
-	showProjectName: boolean;
+	format: NotificationFormat;
 	suppressWhenFocused: boolean;
 	suppressSoundWhenFocused: boolean;
 	focusDetectionScript: string | null;
@@ -70,7 +75,10 @@ const DEFAULT_CONFIG: NotifierConfig = {
 	sound: true,
 	notification: true,
 	timeout: 5,
-	showProjectName: true,
+	format: {
+		title: "OC | {directory}",
+		body: "{message}",
+	},
 	suppressWhenFocused: true,
 	suppressSoundWhenFocused: false,
 	focusDetectionScript: getBundledScriptPath(),
@@ -167,21 +175,30 @@ export function loadConfig(): NotifierConfig {
 				typeof userConfig.timeout === "number" && userConfig.timeout > 0
 					? userConfig.timeout
 					: DEFAULT_CONFIG.timeout,
-			showProjectName:
-				userConfig.showProjectName ?? DEFAULT_CONFIG.showProjectName,
+			format: {
+				title:
+					typeof userConfig.format?.title === "string"
+						? userConfig.format.title
+						: DEFAULT_CONFIG.format.title,
+				body:
+					typeof userConfig.format?.body === "string"
+						? userConfig.format.body
+						: DEFAULT_CONFIG.format.body,
+			},
 			suppressWhenFocused:
 				userConfig.suppressWhenFocused ?? DEFAULT_CONFIG.suppressWhenFocused,
 			suppressSoundWhenFocused:
-				userConfig.suppressSoundWhenFocused ?? DEFAULT_CONFIG.suppressSoundWhenFocused,
-		focusDetectionScript:
-			typeof userConfig.focusDetectionScript === "string"
-				? userConfig.focusDetectionScript
-				: DEFAULT_CONFIG.focusDetectionScript,
-		termInitialTitle:
-			typeof userConfig.termInitialTitle === "string"
-				? userConfig.termInitialTitle
-				: DEFAULT_CONFIG.termInitialTitle,
-		command: {
+				userConfig.suppressSoundWhenFocused ??
+				DEFAULT_CONFIG.suppressSoundWhenFocused,
+			focusDetectionScript:
+				typeof userConfig.focusDetectionScript === "string"
+					? userConfig.focusDetectionScript
+					: DEFAULT_CONFIG.focusDetectionScript,
+			termInitialTitle:
+				typeof userConfig.termInitialTitle === "string"
+					? userConfig.termInitialTitle
+					: DEFAULT_CONFIG.termInitialTitle,
+			command: {
 				enabled:
 					typeof userCommand.enabled === "boolean"
 						? userCommand.enabled
