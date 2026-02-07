@@ -2,9 +2,11 @@
 
 OpenCode plugin that plays sounds and sends system notifications when permission is needed, generation completes, errors occur, or the question tool is invoked. Works on macOS, Linux, and Windows.
 
-## This fork adds focus-aware notification for hyprland
-- It doesn't send notifications if opencode is currently focused (supports tmux too) using [this script](scripts/detect-opencode-hyprland).
-- see [focus detection options](#focus-detection-hyprland-only) for configuration details
+## This fork adds:
+- **focus-aware notification for hyprland**
+  - It doesn't send notifications if opencode is currently focused (supports tmux too) using [this script](scripts/detect-opencode-hyprland).
+  - see [focus detection options](#focus-detection-hyprland-only) for configuration details
+- **Customizable notification formats** with session title, directory, and message placeholders
 
 
 ## Installation
@@ -83,9 +85,9 @@ Get-Content "$env:USERPROFILE\.cache\opencode\node_modules\@sahaj-b\opencode-not
 
 The plugin works out of the box on all platforms. For best results:
 
-- **macOS**: No additional setup required
-- **Windows**: No additional setup required
-- **Linux**: For sounds, one of these should be installed: `paplay`, `aplay`, `mpv`, or `ffplay`. For notifications, `notify-send` is recommended.
+- **macOS**: No additional setup required. **Focus-aware notifications not supported**
+- **Windows**: No additional setup required. **Focus-aware notifications not supported**
+- **Linux**: For sounds, one of these should be installed: `paplay`, `aplay`, `mpv`, or `ffplay`. For notifications, `notify-send` is recommended. **Focus-aware notifications supported on Hyprland only**
 
 ## Configuration
 
@@ -96,7 +98,10 @@ To customize the plugin, create `~/.config/opencode/opencode-notifier.json`:
   "sound": true,
   "notification": true,
   "timeout": 5,
-  "showProjectName": true,
+  "format": {
+    "title": "OC | {directory}",
+    "body": "{message}"
+  },
   "suppressWhenFocused": true,
   "suppressSoundWhenFocused": false,
   "focusDetectionScript": null,
@@ -133,13 +138,32 @@ To customize the plugin, create `~/.config/opencode/opencode-notifier.json`:
 
 ### Options
 
-| Option                     | Type    | Default        | Description                                                            |
-| --------                   | ------  | ---------      | -------------                                                          |
-| `sound`                    | boolean | `true`         | Global toggle for all sounds                                           |
-| `notification`             | boolean | `true`         | Global toggle for all notifications                                    |
-| `timeout`                  | number  | `5`            | Notification duration in seconds (Linux only)                          |
-| `showProjectName`          | boolean | `true`         | Show project folder name in notification title                         |
-| `command`                  | object  | —              | Command execution settings (enabled/path/args/minDuration)             |
+| Option         | Type    | Default   | Description                                                |
+| --------       | ------  | --------- | -------------                                              |
+| `sound`        | boolean | `true`    | Global toggle for all sounds                               |
+| `notification` | boolean | `true`    | Global toggle for all notifications                        |
+| `timeout`      | number  | `5`       | Notification duration in seconds (Linux only)              |
+| `command`      | object  | —         | Command execution settings (enabled/path/args/minDuration) |
+
+
+### Notification Format
+Customize notification appearance using placeholders. Eg:
+
+```json
+{
+  "format": {
+    "title": "OC | {title}",
+    "body": "({directory}) {message}"
+  }
+}
+```
+
+| Placeholder       | Description                                           |
+| ----------------- | ----------------------------------------------------- |
+| `{title}`         | Session title (clamped to 25 characters)              |
+| `{directory}`     | Current working directory (project name)              |
+| `{message}`       | Event message (e.g., "Session finished")              |
+
 
 ### Focus Detection (Hyprland only)
 
