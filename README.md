@@ -2,13 +2,18 @@
 
 OpenCode plugin that plays sounds and sends system notifications when permission is needed, generation completes, errors occur, or the question tool is invoked. Works on macOS, Linux, and Windows.
 
+## This fork adds focus-aware notification for hyprland
+- It doesn't send notifications if opencode is currently focused (supports tmux too) using [this script](scripts/detect-opencode-hyprland).
+- see [focus detection options](#focus-detection-hyprland-only) for configuration details
+
+
 ## Installation
 
 Add the plugin to your `opencode.json` or `opencode.jsonc`:
 
 ```json
 {
-  "plugin": ["@mohak34/opencode-notifier@latest"]
+  "plugin": ["@sahaj-b/opencode-notifier@latest"]
 }
 ```
 
@@ -18,7 +23,7 @@ To pin a specific version:
 
 ```json
 {
-  "plugin": ["@mohak34/opencode-notifier@0.1.14"]
+  "plugin": ["@sahaj-b/opencode-notifier@0.1.14"]
 }
 ```
 
@@ -35,13 +40,13 @@ Clear the cache and restart OpenCode:
 **Linux/macOS:**
 
 ```bash
-rm -rf ~/.cache/opencode/node_modules/@mohak34/opencode-notifier
+rm -rf ~/.cache/opencode/node_modules/@sahaj-b/opencode-notifier
 ```
 
 **Windows (PowerShell):**
 
 ```powershell
-Remove-Item -Recurse -Force "$env:USERPROFILE\.cache\opencode\node_modules\@mohak34\opencode-notifier"
+Remove-Item -Recurse -Force "$env:USERPROFILE\.cache\opencode\node_modules\@sahaj-b\opencode-notifier"
 ```
 
 Then restart OpenCode - it will download the latest version automatically.
@@ -52,7 +57,7 @@ Then restart OpenCode - it will download the latest version automatically.
 
    ```json
    {
-     "plugin": ["@mohak34/opencode-notifier@0.1.14"]
+     "plugin": ["@sahaj-b/opencode-notifier@0.1.14"]
    }
    ```
 
@@ -65,13 +70,13 @@ Then restart OpenCode - it will download the latest version automatically.
 **Linux/macOS:**
 
 ```bash
-cat ~/.cache/opencode/node_modules/@mohak34/opencode-notifier/package.json | grep version
+cat ~/.cache/opencode/node_modules/@sahaj-b/opencode-notifier/package.json | grep version
 ```
 
 **Windows (PowerShell):**
 
 ```powershell
-Get-Content "$env:USERPROFILE\.cache\opencode\node_modules\@mohak34\opencode-notifier\package.json" | Select-String "version"
+Get-Content "$env:USERPROFILE\.cache\opencode\node_modules\@sahaj-b\opencode-notifier\package.json" | Select-String "version"
 ```
 
 ## Platform Notes
@@ -92,6 +97,10 @@ To customize the plugin, create `~/.config/opencode/opencode-notifier.json`:
   "notification": true,
   "timeout": 5,
   "showProjectName": true,
+  "suppressWhenFocused": true,
+  "suppressSoundWhenFocused": false,
+  "focusDetectionScript": null,
+  "termInitialTitle": "^(foot|kitty|Alacritty|Ghostty)$",
   "command": {
     "enabled": false,
     "path": "/path/to/command",
@@ -124,13 +133,33 @@ To customize the plugin, create `~/.config/opencode/opencode-notifier.json`:
 
 ### Options
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `sound` | boolean | `true` | Global toggle for all sounds |
-| `notification` | boolean | `true` | Global toggle for all notifications |
-| `timeout` | number | `5` | Notification duration in seconds (Linux only) |
-| `showProjectName` | boolean | `true` | Show project folder name in notification title |
-| `command` | object | — | Command execution settings (enabled/path/args/minDuration) |
+| Option                     | Type    | Default        | Description                                                            |
+| --------                   | ------  | ---------      | -------------                                                          |
+| `sound`                    | boolean | `true`         | Global toggle for all sounds                                           |
+| `notification`             | boolean | `true`         | Global toggle for all notifications                                    |
+| `timeout`                  | number  | `5`            | Notification duration in seconds (Linux only)                          |
+| `showProjectName`          | boolean | `true`         | Show project folder name in notification title                         |
+| `command`                  | object  | —              | Command execution settings (enabled/path/args/minDuration)             |
+
+### Focus Detection (Hyprland only)
+
+Control notification behavior based on window focus:
+
+```json
+{
+  "suppressWhenFocused": true,
+  "suppressSoundWhenFocused": false,
+  "focusDetectionScript": "/path/to/custom/script",
+  "termInitialTitle": "my-terminal"
+}
+```
+
+| Option                     | Description                                                                                                       |
+| --------                   | -------------                                                                                                     |
+| `suppressWhenFocused`      | Skip notifications entirely when opencode is focused                                                              |
+| `suppressSoundWhenFocused` | Also suppress sounds when focused                                                                                 |
+| `focusDetectionScript`     | Custom script path to detect focus (defaults to bundled hyprland script)                                          |
+| `termInitialTitle`         | Terminal (initial) window title to match for focus detection (supports foot, Ghostty, kitty, Alacritty when null) |
 
 ### Events
 
@@ -300,14 +329,14 @@ sudo apt install mpv
 
    ```json
    {
-     "plugin": ["@mohak34/opencode-notifier@latest"]
+     "plugin": ["@sahaj-b/opencode-notifier@latest"]
    }
    ```
 
 2. **Clear the cache and restart:**
 
    ```bash
-   rm -rf ~/.cache/opencode/node_modules/@mohak34/opencode-notifier
+   rm -rf ~/.cache/opencode/node_modules/@sahaj-b/opencode-notifier
    ```
 
 ## License
